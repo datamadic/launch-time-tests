@@ -1,0 +1,16 @@
+{
+    "devtools_port": 9090,
+    "startup_app": {
+        "name": "Base App",
+        "description": "OpenFin POC",
+        "url": "http://localhost:3375/app.html",
+        "_url": "http://10.0.0.161:3375/app.html",
+        "uuid": "Base App",
+        "autoShow": true
+    },
+    "runtime": {
+        "arguments": "--v=1",
+        "version": "beta"
+    },
+    "shortcut": {}
+}

@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+        body {
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+<body>
+    <span id="appname"></span> <br>
+    current url: <strong><span id="url"></span></strong><br/>
+    openfin version: <span id="version"></span>
+    <br>
+    
+    <h4>basic x-orig tests</h4>
+    <button id="googleproxy">Google Proxied</button>
+    <button id="googleraw">Google Raw</button>
+    <h4>without preload script</h4>
+    <button id="makeproxy">Make Proxied App port 3375</button>
+    <button id="makelocalhost">Make Direct port 80 (x-orig)</button>
+    <button id="makenon80">Make Direct port 8080 (x-orig)</button>
+    <h4>with preload script</h4>
+    <button id="plmakeproxy">Make Proxied App port 3375</button>
+    <button id="plmakelocalhost">Make Direct port 80 (x-orig)</button>
+    <button id="plmakenon80">Make Direct port 8080 (x-orig)</button>
+    
+
+    <script>
+        // check the x origin stuff on the scripts (deny a preload etc on headers etc)
+        const origin = location.origin;
+        const protocol = location.protocol;
+        const port = location.port;
+        const hostname = location.hostname;
+        const base = protocol+hostname;
+
+        url.innerHTML = location.href;
+        appname.innerHTML = fin.desktop.Window.getCurrent().name;
+
+        version.innerHTML = fin.desktop.getVersion();
+        
+        googleproxy.onclick=()=>{
+            gproxy = new fin.desktop.Application({
+                name: 'google-proxy',
+                url: `${base}:3375/google.com`,
+                uuid: 'google-proxy',
+                waitForPageLoad: false,
+                autoShow: true
+            }, () => gproxy.run(console.log, console.log));
+        };
+        googleraw.onclick=()=>{
+            graw = new fin.desktop.Application({
+                name: 'google-raw',
+                url: `https://google.com`,
+                uuid: 'google-raw',
+                waitForPageLoad: false,
+                autoShow: true
+            }, () => graw.run(console.log, console.log));
+        };
+
+        makeproxy.onclick = () => {
+            proxy = new fin.desktop.Application({
+                name: 'from-proxy',
+                url: `${base}:3375/app.html`,
+                uuid: 'from-proxy',
+                waitForPageLoad: false,
+                autoShow: true
+            }, () => proxy.run(console.log, console.log));
+        };
+
+        makelocalhost.onclick = () => {
+            local = new fin.desktop.Application({
+                name: 'from-local',
+                url: `${base}/app.html`,
+                uuid: 'from-local',
+                waitForPageLoad: false,
+                autoShow: true
+            }, () => local.run(console.log, console.log));
+        };
+
+        makenon80.onclick = () => {
+            non80 = new fin.desktop.Application({
+                name: 'from-non80',
+                url: `${base}:8080/app.html`,
+                uuid: 'from-non80',
+                waitForPageLoad: false,
+                autoShow: true
+            }, () => non80.run(console.log, console.log));
+        };
+
+        // -----------------------------------------------------
+        // with preload
+        // -----------------------------------------------------
+        plmakeproxy.onclick = () => {
+            plproxy = new fin.desktop.Application({
+                name: 'from-proxy-with-preload',
+                url: `${base}:3375/app.html`,
+                uuid: 'from-proxy-with-preload',
+                waitForPageLoad: false,
+                autoShow: true,
+                preloadScripts: [{url:'https://unpkg.com/react-dom@16/umd/react-dom.development.js'}]
+            }, () => {
+                console.log('asdfasdfasdfasdf');
+                plproxy.run(console.log, console.log)
+            }, console.log);
+        };
+
+        plmakelocalhost.onclick = () => {
+            pllocal = new fin.desktop.Application({
+                name: 'from-local-with-preload',
+                url: `${base}/app.html`,
+                uuid: 'from-local-with-preload',
+                waitForPageLoad: false,
+                autoShow: true,
+                preloadScripts: [{url:'https://unpkg.com/react-dom@16/umd/react-dom.development.js'}]
+            }, () => pllocal.run(console.log, console.log));
+        };
+
+        plmakenon80.onclick = () => {
+            plnon80 = new fin.desktop.Application({
+                name: 'from-non-80-with-preload',
+                url: `${base}:8080/app.html`,
+                uuid: 'from-non-80-with-preload',
+                waitForPageLoad: false,
+                autoShow: true,
+                preloadScripts: [{url:'https://unpkg.com/react-dom@16/umd/react-dom.development.js'}]
+            }, () => plnon80.run(console.log, console.log));
+        };
+    </script>
+</body>
+</html>
