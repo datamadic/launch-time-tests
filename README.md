@@ -1,4 +1,4 @@
-To get going:
+To get going
 ````
 npm install
 ````

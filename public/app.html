@@ -14,6 +14,8 @@
     <span id="appname"></span> <br>
     current url: <strong><span id="url"></span></strong><br/>
     openfin version: <span id="version"></span>
+    <br><br>
+    <button id="child">make child window</button>
     <br>
     
     <h4>basic x-orig tests</h4>
@@ -30,6 +32,19 @@
     
 
     <script>
+        function mkchild () {
+            c2 = new fin.desktop.Window({
+                name: 'kid',
+                autoShow: true,
+                url: location.href
+            },() => {
+                child.onclick = ()=> {
+                    c2.nativeWindow.location = "http://google.com";
+                    child.onclick = mkchild;
+                    }
+            });
+        }
+        child.onclick = mkchild;
         // check the x origin stuff on the scripts (deny a preload etc on headers etc)
         const origin = location.origin;
         const protocol = location.protocol;
